@@ -1,0 +1,39 @@
+import seaborn as sns
+import numpy as np
+from sklearn.cross_validation import train_test_split
+from keras.models import Sequential
+from keras.layers import Dense, Dropout
+from keras.regularizers import l2
+
+from keras.utils import np_utils
+
+#labelsTrain = np_utils.to_categorical(y_train)
+#labelsTest = np_utils.to_categorical(y_test) 
+#labelsDepy = np_utils.to_categorical(y_deploy)                                              
+labelsTrain =  y_train
+labelsDepy =   y_deploy                                         
+model = Sequential()
+model.add(Dense(40, input_dim=7, init='normal', activation='relu'))
+model.add(Dense(1, init='normal'))
+
+model.load_weights('Boston_House_Modelbest.hdf5')
+model.compile(loss='mean_squared_error', optimizer='adam')
+# Actual modelling
+
+
+
+predicted = model.predict(X_deploy)
+r_squared = r2_score(y_deploy, predicted, multioutput='variance_weighted')
+print 'R-squared = ',r_squared
+
+
+
+####################################################             
+#n_samples ,_=Y_test.shape
+SamplingTesting=500
+All_weights=model.get_weights()
+All_weights_BUCKUP = model.get_weights()
+FC_weights_3=All_weights[0]
+row,col= shape(FC_weights_3)
+SizeWights=row*col
+OldAccuracy = r_squared
